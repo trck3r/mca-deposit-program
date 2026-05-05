@@ -1,0 +1,956 @@
+<html lang="en"><head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>MCA Deposit Program · Cashflow Acquisitions</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #ffffff;
+    --bg-2: #fafaf9;
+    --bg-3: #f4f4f5;
+    --card: #ffffff;
+    --card-hover: #fafaf9;
+    --border: #e7e5e4;
+    --border-strong: #d6d3d1;
+    --text: #0c0a09;
+    --text-2: #292524;
+    --muted: #57534e;
+    --muted-dim: #a8a29e;
+    --primary: #009ef4;
+    --primary-hover: #0084d1;
+    --primary-dim: rgba(0, 158, 244, 0.08);
+    --primary-glow: rgba(0, 158, 244, 0.18);
+    --money: #15803d;
+    --money-dim: rgba(21, 128, 61, 0.08);
+    --gold: #b45309;
+    --gold-dim: rgba(180, 83, 9, 0.08);
+    --danger: #b91c1c;
+    --ft: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    --mono: 'JetBrains Mono', 'SF Mono', Menlo, monospace;
+    --max-w: 1080px;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; }
+  body {
+    font-family: var(--ft);
+    background: var(--bg);
+    color: var(--text);
+    line-height: 1.55;
+    font-size: 16px;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+  a { color: inherit; text-decoration: none; }
+
+  /* ---------- TOP BAR ---------- */
+  .topbar {
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    background: rgba(255, 255, 255, 0.92);
+    backdrop-filter: saturate(180%) blur(10px);
+    -webkit-backdrop-filter: saturate(180%) blur(10px);
+    border-bottom: 1px solid var(--border);
+  }
+  .topbar-inner {
+    max-width: var(--max-w);
+    margin: 0 auto;
+    padding: 14px 24px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+  .topbar-brand {
+    font-size: 14px;
+    font-weight: 700;
+    letter-spacing: -0.2px;
+    color: var(--text);
+  }
+  .topbar-brand span { color: var(--muted); font-weight: 500; }
+  .btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    padding: 10px 18px;
+    background: var(--primary);
+    color: white;
+    border: none;
+    border-radius: 8px;
+    font-family: var(--ft);
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.15s ease;
+    white-space: nowrap;
+  }
+  .btn:hover { background: var(--primary-hover); transform: translateY(-1px); }
+  .btn-lg { padding: 14px 26px; font-size: 16px; }
+  .btn-secondary {
+    background: transparent;
+    color: var(--text);
+    border: 1px solid var(--border-strong);
+  }
+  .btn-secondary:hover { background: var(--bg-2); transform: translateY(-1px); }
+
+  /* ---------- LAYOUT ---------- */
+  .container { max-width: var(--max-w); margin: 0 auto; padding: 0 24px; }
+  section { padding: 72px 0; }
+  section + section { border-top: 1px solid var(--border); }
+
+  /* ---------- HERO ---------- */
+  .hero {
+    padding: 80px 0 64px;
+    background: linear-gradient(180deg, #fafaf9 0%, #ffffff 100%);
+    text-align: center;
+  }
+  .hero-eyebrow {
+    display: inline-block;
+    padding: 6px 14px;
+    background: var(--primary-dim);
+    color: var(--primary);
+    border-radius: 100px;
+    font-size: 12px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    margin-bottom: 24px;
+  }
+  .hero h1 {
+    font-size: clamp(36px, 6vw, 56px);
+    font-weight: 800;
+    line-height: 1.08;
+    letter-spacing: -1.5px;
+    color: var(--text);
+    max-width: 860px;
+    margin: 0 auto 22px;
+  }
+  .hero-sub {
+    font-size: clamp(16px, 2vw, 19px);
+    color: var(--muted);
+    max-width: 680px;
+    margin: 0 auto 36px;
+    line-height: 1.55;
+  }
+  .hero-cta-row {
+    display: flex;
+    gap: 12px;
+    justify-content: center;
+    flex-wrap: wrap;
+    margin-bottom: 56px;
+  }
+  .hero-stats {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 16px;
+    max-width: 880px;
+    margin: 0 auto;
+  }
+  .hero-stat {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    padding: 22px 16px;
+    text-align: center;
+  }
+  .hero-stat-value {
+    font-family: var(--mono);
+    font-size: 26px;
+    font-weight: 700;
+    color: var(--text);
+    letter-spacing: -0.5px;
+    line-height: 1.1;
+  }
+  .hero-stat-label {
+    font-size: 12px;
+    color: var(--muted);
+    margin-top: 8px;
+    line-height: 1.4;
+  }
+
+  /* ---------- SECTION HEADERS ---------- */
+  h2 {
+    font-size: clamp(28px, 4.5vw, 40px);
+    font-weight: 800;
+    line-height: 1.1;
+    letter-spacing: -0.8px;
+    margin-bottom: 16px;
+    color: var(--text);
+  }
+  .section-lede {
+    font-size: 17px;
+    color: var(--muted);
+    max-width: 680px;
+    margin-bottom: 44px;
+    line-height: 1.6;
+  }
+  .section-center { text-align: center; }
+  .section-center .section-lede { margin-left: auto; margin-right: auto; }
+
+  /* ---------- CALCULATOR ---------- */
+  .calc-wrap {
+    background: var(--bg-2);
+    border: 1px solid var(--border);
+    border-radius: 18px;
+    padding: 40px 32px;
+    margin-top: 8px;
+  }
+  .calc-input-block { margin-bottom: 36px; }
+  .calc-input-label {
+    font-size: 12px;
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    color: var(--muted);
+    text-align: center;
+    margin-bottom: 10px;
+    font-weight: 600;
+  }
+  .calc-amount-display {
+    font-family: var(--mono);
+    font-size: 60px;
+    font-weight: 700;
+    text-align: center;
+    color: var(--text);
+    letter-spacing: -2px;
+    line-height: 1;
+    margin-bottom: 28px;
+  }
+  .calc-slider {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 100%;
+    height: 6px;
+    background: var(--border-strong);
+    border-radius: 3px;
+    outline: none;
+    margin-bottom: 14px;
+  }
+  .calc-slider::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 28px;
+    height: 28px;
+    background: var(--primary);
+    border-radius: 50%;
+    cursor: pointer;
+    border: 4px solid var(--bg-2);
+    box-shadow: 0 0 0 2px var(--primary), 0 4px 14px var(--primary-glow);
+    transition: transform 0.15s ease;
+  }
+  .calc-slider::-webkit-slider-thumb:hover { transform: scale(1.1); }
+  .calc-slider::-moz-range-thumb {
+    width: 28px;
+    height: 28px;
+    background: var(--primary);
+    border-radius: 50%;
+    cursor: pointer;
+    border: 4px solid var(--bg-2);
+    box-shadow: 0 0 0 2px var(--primary), 0 4px 14px var(--primary-glow);
+  }
+  .calc-slider-labels {
+    display: flex;
+    justify-content: space-between;
+    font-family: var(--mono);
+    font-size: 12px;
+    color: var(--muted);
+    padding: 0 4px;
+  }
+  .calc-results {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 14px;
+  }
+  .calc-result-card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    padding: 22px 16px;
+    text-align: center;
+    transition: all 0.15s ease;
+  }
+  .calc-result-card:hover {
+    border-color: var(--primary);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 16px rgba(0, 158, 244, 0.08);
+  }
+  .calc-result-label {
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 1.2px;
+    color: var(--muted);
+    font-weight: 600;
+    margin-bottom: 10px;
+  }
+  .calc-result-value {
+    font-family: var(--mono);
+    font-size: 26px;
+    font-weight: 700;
+    color: var(--money);
+    letter-spacing: -0.5px;
+    line-height: 1.1;
+  }
+  .calc-result-sub {
+    font-size: 12px;
+    color: var(--muted);
+    margin-top: 6px;
+  }
+  .calc-disclaimer {
+    margin-top: 28px;
+    padding-top: 22px;
+    border-top: 1px solid var(--border);
+    font-size: 13px;
+    color: var(--muted);
+    line-height: 1.65;
+    text-align: center;
+  }
+  .calc-disclaimer strong { color: var(--text-2); }
+  .calc-disclaimer a {
+    color: var(--primary);
+    font-weight: 600;
+  }
+  .calc-disclaimer a:hover { text-decoration: underline; }
+
+  /* ---------- BREAKDOWN ---------- */
+  .steps {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 18px;
+    margin-bottom: 56px;
+  }
+  .step {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    padding: 24px 22px;
+  }
+  .step-num {
+    font-family: var(--mono);
+    font-size: 13px;
+    font-weight: 700;
+    color: var(--primary);
+    margin-bottom: 14px;
+    display: inline-block;
+    padding: 4px 10px;
+    background: var(--primary-dim);
+    border-radius: 100px;
+  }
+  .step h3 {
+    font-size: 17px;
+    font-weight: 700;
+    margin-bottom: 8px;
+    color: var(--text);
+  }
+  .step p {
+    font-size: 14px;
+    color: var(--muted);
+    line-height: 1.55;
+  }
+
+  .math-box {
+    background: var(--bg-2);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    padding: 28px;
+    margin-bottom: 56px;
+  }
+  .math-box-title {
+    font-family: var(--mono);
+    font-size: 12px;
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    color: var(--muted);
+    margin-bottom: 16px;
+    font-weight: 600;
+  }
+  .math-row {
+    display: grid;
+    grid-template-columns: 1fr auto 1fr;
+    gap: 18px;
+    padding: 14px 0;
+    align-items: center;
+  }
+  .math-row + .math-row { border-top: 1px solid var(--border); }
+  .math-row.total { border-top: 2px solid var(--text); padding-top: 18px; margin-top: 8px; }
+  .math-label { font-size: 14px; color: var(--text-2); }
+  .math-label strong { display: block; font-family: var(--mono); font-size: 16px; color: var(--text); margin-top: 2px; }
+  .math-arrow { color: var(--muted-dim); font-size: 18px; text-align: center; }
+  .math-value {
+    font-family: var(--mono);
+    font-size: 22px;
+    font-weight: 700;
+    color: var(--money);
+    text-align: right;
+    letter-spacing: -0.5px;
+  }
+  .math-row.total .math-value { font-size: 28px; }
+  .math-value small {
+    display: block;
+    font-family: var(--ft);
+    font-size: 12px;
+    font-weight: 400;
+    color: var(--muted);
+    margin-top: 2px;
+  }
+
+  .credibility {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 18px;
+    margin-bottom: 56px;
+  }
+  .cred {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    padding: 22px;
+  }
+  .cred-stat {
+    font-family: var(--mono);
+    font-size: 28px;
+    font-weight: 700;
+    color: var(--text);
+    letter-spacing: -1px;
+    margin-bottom: 6px;
+  }
+  .cred-stat span { color: var(--gold); }
+  .cred-label {
+    font-size: 13px;
+    color: var(--muted);
+    line-height: 1.5;
+  }
+
+  .protections {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 18px;
+  }
+  .protection {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    padding: 22px;
+  }
+  .protection-icon {
+    width: 38px;
+    height: 38px;
+    border-radius: 10px;
+    background: var(--money-dim);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 18px;
+    margin-bottom: 14px;
+  }
+  .protection h4 {
+    font-size: 15px;
+    font-weight: 700;
+    margin-bottom: 6px;
+    color: var(--text);
+  }
+  .protection p {
+    font-size: 13px;
+    color: var(--muted);
+    line-height: 1.55;
+  }
+
+  /* ---------- TESTIMONIALS ---------- */
+  .reviews {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 20px;
+  }
+  .review {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    padding: 28px;
+    display: flex;
+    flex-direction: column;
+  }
+  .review-quote {
+    font-size: 15px;
+    color: var(--text-2);
+    line-height: 1.6;
+    margin-bottom: 22px;
+    flex: 1;
+  }
+  .review-attr {
+    border-top: 1px solid var(--border);
+    padding-top: 16px;
+  }
+  .review-name {
+    font-size: 14px;
+    font-weight: 700;
+    color: var(--text);
+  }
+  .review-meta {
+    font-size: 12px;
+    color: var(--muted);
+    margin-top: 4px;
+    line-height: 1.5;
+  }
+
+  /* ---------- FAQ ---------- */
+  .faq-list { border-top: 1px solid var(--border); }
+  .faq-item {
+    border-bottom: 1px solid var(--border);
+    padding: 24px 0;
+  }
+  .faq-q {
+    font-size: 17px;
+    font-weight: 700;
+    color: var(--text);
+    margin-bottom: 10px;
+  }
+  .faq-a {
+    font-size: 15px;
+    color: var(--muted);
+    line-height: 1.65;
+  }
+  .faq-a strong { color: var(--text-2); }
+
+  /* ---------- FINAL CTA ---------- */
+  .final-cta {
+    background: var(--text);
+    color: white;
+    border-radius: 18px;
+    padding: 56px 40px;
+    text-align: center;
+    margin-top: 32px;
+  }
+  .final-cta h2 {
+    color: white;
+    margin-bottom: 14px;
+    font-size: clamp(26px, 4vw, 36px);
+  }
+  .final-cta p {
+    color: rgba(255, 255, 255, 0.75);
+    font-size: 16px;
+    margin-bottom: 28px;
+    max-width: 520px;
+    margin-left: auto;
+    margin-right: auto;
+  }
+  .final-cta-meta {
+    margin-top: 16px;
+    font-size: 11px;
+    color: rgba(255, 255, 255, 0.55);
+    font-family: var(--mono);
+    letter-spacing: 1px;
+  }
+
+  /* ---------- FOOTER ---------- */
+  footer {
+    background: var(--bg-2);
+    padding: 40px 0;
+    text-align: center;
+    border-top: 1px solid var(--border);
+  }
+  .footer-disclaimer {
+    font-size: 12px;
+    color: var(--muted);
+    line-height: 1.6;
+    max-width: 760px;
+    margin: 14px auto 0;
+  }
+  .footer-brand {
+    font-size: 13px;
+    color: var(--text-2);
+    font-weight: 600;
+  }
+
+  /* ---------- MOBILE ---------- */
+  @media (max-width: 820px) {
+    section { padding: 56px 0; }
+    .hero { padding: 56px 0 48px; }
+    .hero-stats { grid-template-columns: repeat(2, 1fr); gap: 12px; }
+    .hero-stat { padding: 18px 12px; }
+    .hero-stat-value { font-size: 22px; }
+    .hero-cta-row { margin-bottom: 40px; }
+    .calc-wrap { padding: 28px 18px; border-radius: 16px; }
+    .calc-amount-display { font-size: 42px; margin-bottom: 22px; }
+    .calc-results { grid-template-columns: repeat(2, 1fr); gap: 10px; }
+    .calc-result-card { padding: 16px 10px; }
+    .calc-result-value { font-size: 20px; }
+    .calc-result-label { font-size: 10px; letter-spacing: 1px; }
+    .calc-slider-labels span:nth-child(2),
+    .calc-slider-labels span:nth-child(4) { display: none; }
+    .calc-slider::-webkit-slider-thumb { width: 34px; height: 34px; }
+    .calc-slider::-moz-range-thumb { width: 34px; height: 34px; }
+    .steps { grid-template-columns: repeat(2, 1fr); }
+    .credibility { grid-template-columns: 1fr; }
+    .protections { grid-template-columns: 1fr; }
+    .reviews { grid-template-columns: 1fr; }
+    .math-row { grid-template-columns: 1fr auto; gap: 12px; }
+    .math-arrow { display: none; }
+    .math-value { text-align: left; font-size: 20px; }
+    .math-row.total .math-value { font-size: 24px; }
+    .final-cta { padding: 40px 24px; border-radius: 16px; }
+    .topbar-inner { padding: 12px 18px; }
+    .container { padding: 0 18px; }
+  }
+  @media (max-width: 480px) {
+    .steps { grid-template-columns: 1fr; }
+    .hero h1 { letter-spacing: -1px; }
+  }
+</style>
+</head>
+<body>
+
+<!-- TOP BAR -->
+<header class="topbar">
+  <div class="topbar-inner">
+    <div class="topbar-brand">Cashflow Acquisitions <span>· MCA Deposit Program</span></div>
+    <a href="#cta" class="btn">Schedule a Call</a>
+  </div>
+</header>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="container">
+    <div class="hero-eyebrow">Private Lending · Weekly Payouts · 50-Year Track Record</div>
+    <h1>Deploy $10K. Collect 10% weekly. Full ROI in 10 weeks. Pull out any Friday.</h1>
+    <p class="hero-sub">
+      Small businesses need fast capital. Banks take 90 days. We fund them in 48 hours and take first-position liens on their receivables, equipment, and bank account. You supply the capital. They pay it back daily. You collect every Friday.
+    </p>
+    <div class="hero-cta-row">
+      <a href="#cta" class="btn btn-lg">Book a 30-Min Walkthrough</a>
+      <a href="#how" class="btn btn-lg btn-secondary">See the math</a>
+    </div>
+    <div class="hero-stats">
+      <div class="hero-stat">
+        <div class="hero-stat-value">10%+</div>
+        <div class="hero-stat-label">Weekly return on capital</div>
+      </div>
+      <div class="hero-stat">
+        <div class="hero-stat-value">7 days</div>
+        <div class="hero-stat-label">Max lock-up period</div>
+      </div>
+      <div class="hero-stat">
+        <div class="hero-stat-value">$10K</div>
+        <div class="hero-stat-label">Minimum position size</div>
+      </div>
+      <div class="hero-stat">
+        <div class="hero-stat-value">50+ yrs</div>
+        <div class="hero-stat-label">MCA industry maturity</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CALCULATOR -->
+<section id="how">
+  <div class="container section-center">
+    <h2>Run your own numbers.</h2>
+    <p class="section-lede">
+      Conservative math: 10 points (10%) per week on capital deployed. Slide to your position size. Returns scale with commitment — $20K positions earn 20 points weekly.
+    </p>
+
+    <div class="calc-wrap">
+      <div class="calc-input-block">
+        <div class="calc-input-label">Your position size</div>
+        <div class="calc-amount-display" id="calc-amount">$20,000</div>
+        <input type="range" min="10000" max="100000" step="1000" value="20000" class="calc-slider" id="calc-slider" aria-label="Position size in dollars">
+        <div class="calc-slider-labels">
+          <span>$10K</span>
+          <span>$25K</span>
+          <span>$50K</span>
+          <span>$75K</span>
+          <span>$100K</span>
+        </div>
+      </div>
+
+      <div class="calc-results">
+        <div class="calc-result-card">
+          <div class="calc-result-label">Per Week</div>
+          <div class="calc-result-value" id="calc-week">$2,000</div>
+          <div class="calc-result-sub">paid every Friday</div>
+        </div>
+        <div class="calc-result-card">
+          <div class="calc-result-label">Per Month</div>
+          <div class="calc-result-value" id="calc-month">$8,000</div>
+          <div class="calc-result-sub">4 weeks redeployed</div>
+        </div>
+        <div class="calc-result-card">
+          <div class="calc-result-label">Per Quarter</div>
+          <div class="calc-result-value" id="calc-quarter">$26,000</div>
+          <div class="calc-result-sub">13 weeks of returns</div>
+        </div>
+        <div class="calc-result-card">
+          <div class="calc-result-label">Full ROI</div>
+          <div class="calc-result-value" id="calc-roi">5 wks</div>
+          <div class="calc-result-sub">principal returned in full</div>
+        </div>
+      </div>
+
+      <p class="calc-disclaimer">
+        <strong>Conservative math:</strong> assumes the standard 10-point weekly rate, continuous redeployment of principal only, no skipped weeks. Returns are based on real cash flow from vetted borrower businesses. Past performance does not guarantee future results. <a href="#cta">Walk through your numbers with the team</a>
+      </p>
+    </div>
+  </div>
+</section>
+
+<!-- BREAKDOWN -->
+<section>
+  <div class="container">
+    <h2>How it actually works.</h2>
+    <p class="section-lede">
+      A merchant cash advance is how a brick-and-mortar business gets capital in days instead of months. They get the speed. You get the upside. The structure has been institutionalized for decades — AmEx, OnDeck, and CFG operate this exact model at scale.
+    </p>
+
+    <div class="steps">
+      <div class="step">
+        <div class="step-num">01</div>
+        <h3>You deposit capital</h3>
+        <p>$10K minimum. Standard position is $20K. Larger commitments split across multiple businesses for diversification.</p>
+      </div>
+      <div class="step">
+        <div class="step-num">02</div>
+        <h3>Placed with a vetted business</h3>
+        <p>2+ years of bank statements. 6+ months consistent receivables. Approved for $50-80K but we only deploy $20K. Over-collateralized by design.</p>
+      </div>
+      <div class="step">
+        <div class="step-num">03</div>
+        <h3>Daily ACH collections</h3>
+        <p>We purchase their future receivables — not lending. Daily ACH pulls hit against first-position liens. You see payments accumulate Mon-Fri.</p>
+      </div>
+      <div class="step">
+        <div class="step-num">04</div>
+        <h3>You decide every Friday</h3>
+        <p>Position closes. Redeploy into next week, or wire out. No lock-up beyond 7 days. Your call, every single week.</p>
+      </div>
+    </div>
+
+    <div class="math-box">
+      <div class="math-box-title">A $20,000 position · One week</div>
+      <div class="math-row">
+        <div class="math-label">You deposit<strong>$20,000</strong></div>
+        <div class="math-arrow">&rarr;</div>
+        <div class="math-value">$4,000<small>your return that week</small></div>
+      </div>
+      <div class="math-row">
+        <div class="math-label">Daily ACH (Mon-Thu)<strong>4 days &times; $584</strong></div>
+        <div class="math-arrow">&rarr;</div>
+        <div class="math-value">$2,336<small>steady, day-by-day</small></div>
+      </div>
+      <div class="math-row">
+        <div class="math-label">Friday balloon<strong>Remaining balance</strong></div>
+        <div class="math-arrow">&rarr;</div>
+        <div class="math-value">$1,664<small>closes the position</small></div>
+      </div>
+      <div class="math-row total">
+        <div class="math-label"><strong>By Friday</strong>$20K principal + $4K return</div>
+        <div class="math-arrow">=</div>
+        <div class="math-value">$24,000<small>pull out or redeploy</small></div>
+      </div>
+    </div>
+
+    <h3 style="font-size:22px; font-weight:700; margin-bottom:18px; letter-spacing:-0.5px;">Why this isn't a fad.</h3>
+    <div class="credibility">
+      <div class="cred">
+        <div class="cred-stat"><span>$850M</span></div>
+        <div class="cred-label"><strong style="color:var(--text-2);">AmEx acquired Kabbage</strong> in 2020 — institutional validation that the asset class works at scale.</div>
+      </div>
+      <div class="cred">
+        <div class="cred-stat"><span>46%</span></div>
+        <div class="cred-label"><strong style="color:var(--text-2);">OnDeck portfolio yield</strong> reported in public 10-K filings. The math you're seeing isn't an anomaly — it's the standard yield profile.</div>
+      </div>
+      <div class="cred">
+        <div class="cred-stat"><span>$145M</span></div>
+        <div class="cred-label"><strong style="color:var(--text-2);">CFG Merchant Solutions credit facility</strong> raised in 2024. Banks lend to MCA operators — the clearest legitimacy signal that exists.</div>
+      </div>
+    </div>
+
+    <h3 style="font-size:22px; font-weight:700; margin: 56px 0 18px; letter-spacing:-0.5px;">How your capital is protected.</h3>
+    <div class="protections">
+      <div class="protection">
+        <div class="protection-icon">📜</div>
+        <h4>First-position UCC liens</h4>
+        <p>Senior claim on receivables, equipment, and inventory. We get paid before any other creditor — including their bank. ACH access on their merchant processor reserves ($10-15K accessible immediately).</p>
+      </div>
+      <div class="protection">
+        <div class="protection-icon">⏱</div>
+        <h4>2+ years of vetting</h4>
+        <p>2+ years of daily bank balances and 6+ months of consistent receivables required. No startups, no cash-poor businesses. Only established operations generating steady revenue.</p>
+      </div>
+      <div class="protection">
+        <div class="protection-icon">🏦</div>
+        <h4>Over-collateralized by 2.5x</h4>
+        <p>We deploy $20K into businesses approved for $50-80K. Equipment and inventory alone exceed $100K on every deal. You're structurally protected even in a worst case.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- WHY BUSINESSES USE MCA -->
+<section>
+  <div class="container">
+    <h2>Why businesses pay these rates willingly.</h2>
+    <p class="section-lede">
+      The most common question: "Why would a business pay 20-40% for short-term capital?" Because speed and liquidity are worth more than interest savings when you're doing $800K/month.
+    </p>
+
+    <div class="steps" style="grid-template-columns: repeat(3, 1fr);">
+      <div class="step">
+        <div class="step-num">Speed</div>
+        <h3>48 hours vs. 90 days</h3>
+        <p>Banks take months. Payroll is due Friday. A restaurant that does $40K/week in revenue isn't waiting 90 days for a bank loan — they'll pay the spread for same-week capital.</p>
+      </div>
+      <div class="step">
+        <div class="step-num">Liquidity</div>
+        <h3>"I'm not touching my cash"</h3>
+        <p>A construction company doing $1.2M/month takes $100K MCA every month for payroll. He makes 800K+ — he just refuses to touch his own liquidity. Been doing it for 8 months straight.</p>
+      </div>
+      <div class="step">
+        <div class="step-num">Access</div>
+        <h3>Over-leveraged but profitable</h3>
+        <p>Many businesses already have outstanding loans. Banks won't extend more credit. MCA is the only option that doesn't care about existing debt — it cares about daily receivables.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- REVIEWS -->
+<section>
+  <div class="container">
+    <h2>Real lenders. Real positions.</h2>
+    <p class="section-lede">
+      Every participant started skeptical. The pattern is always the same — start at minimum, see the first Friday hit, then redeploy and scale.
+    </p>
+
+    <div class="reviews">
+      <div class="review">
+        <div class="review-quote">
+          "I'd lost a hundred thousand dollars on two scams before this — crypto and a real-estate syndicate that filed Chapter 11 the day my last wire cleared. I was done. Then I tried this with a small position. Four payments in, I called Aaron crying. It just works."
+        </div>
+        <div class="review-attr">
+          <div class="review-name">Alan D.</div>
+          <div class="review-meta">Active lender · 4+ weekly payouts<br>Recovered first scam loss in 10 weeks</div>
+        </div>
+      </div>
+      <div class="review">
+        <div class="review-quote">
+          "Started at $10K. Saw the math work. Now I'm at $35K. I'm not pulling anything out — I'm just letting it compound. At this point it's basically a job that pays me to do nothing."
+        </div>
+        <div class="review-attr">
+          <div class="review-name">David K.</div>
+          <div class="review-meta">Active lender · Scaling 3.5&times;<br>$10K &rarr; $35K in deployed capital</div>
+        </div>
+      </div>
+      <div class="review">
+        <div class="review-quote">
+          "I told Aaron I wasn't sure — that I'd start at the minimum, pull it after the week, and decide. He said 'everyone says that.' First week hit, I redeployed. By month two I was at $20K and bringing my network to the table."
+        </div>
+        <div class="review-attr">
+          <div class="review-name">Jack A.</div>
+          <div class="review-meta">Active lender · Bringing referrals<br>Now deploying $20K weekly</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FAQ + CTA -->
+<section>
+  <div class="container">
+    <h2>Quick answers.</h2>
+    <p class="section-lede">
+      The honest answers to the questions every prospect asks before their first call.
+    </p>
+
+    <div class="faq-list">
+      <div class="faq-item">
+        <div class="faq-q">"This sounds too good to be true."</div>
+        <div class="faq-a">
+          We hear this on every single call. The math is consistent with the entire MCA industry — not unique to us. <strong>OnDeck reports 46% portfolio yields in public 10-K filings.</strong> Merchants pay 20-40% factor rates because banks won't fund them in the timeline they need (48 hours vs 90 days). We earn the spread between what the business pays and what you receive. Each weekly payment comes from real ACH withdrawals on a real business — verifiable in your dashboard.
+        </div>
+      </div>
+      <div class="faq-item">
+        <div class="faq-q">"What if the business doesn't pay?"</div>
+        <div class="faq-a">
+          Four protective layers. <strong>First-position UCC liens</strong> on receivables, equipment, and inventory — we get paid before any other creditor. <strong>ACH access on merchant processor reserves</strong> — $10-15K accessible immediately if needed. <strong>7-30 day contract window</strong> gives operations room to collect before any "default" is called. <strong>Over-collateralized deployment</strong> — we lend $20K into businesses with $100K+ in seizable assets. In the program's history, no lender has lost principal.
+        </div>
+      </div>
+      <div class="faq-item">
+        <div class="faq-q">"How quickly can I get my money out?"</div>
+        <div class="faq-a">
+          Every Friday, your position closes. You decide on the spot — redeploy into next week's position, or wire it back to your account. <strong>Maximum lock-up is 7 days.</strong> Once we hit our $2M cap and switch to line-of-credit fulfillment, existing participants get same-day emergency liquidity.
+        </div>
+      </div>
+      <div class="faq-item">
+        <div class="faq-q">"Why isn't everyone doing this?"</div>
+        <div class="faq-a">
+          They are — at the institutional level. <strong>CFG Merchant Solutions raised $145M from institutional lenders in 2024.</strong> American Express paid $850M for Kabbage. Private equity owns most of this market. Once operators hit scale ($30M+ lines of credit), they stop needing individual participants entirely. What's rare is access to a smaller book that's still open. We're capping ours at ~$2M before we close to new participants.
+        </div>
+      </div>
+      <div class="faq-item">
+        <div class="faq-q">"Do I need to be an accredited investor?"</div>
+        <div class="faq-a">
+          <strong>No.</strong> This is private lending — not a securities offering. We purchase future receivables. The contract uses "lender" and "borrower" language, not "investor" or "investment." This isn't a workaround; it's the standard legal structure for the entire MCA industry.
+        </div>
+      </div>
+      <div class="faq-item">
+        <div class="faq-q">"Why does the program cap at $2M?"</div>
+        <div class="faq-a">
+          Once we hit $2M in deployed capital with a clean track record, we qualify for institutional credit lines. At that point, we self-fund and don't need new participants. Existing lenders get rolled into a more flexible structure with better liquidity. <strong>Getting in now means getting in before the book closes permanently.</strong>
+        </div>
+      </div>
+    </div>
+
+    <div class="final-cta" id="cta">
+      <h2>Your first Friday is closer than you think.</h2>
+      <p>30 minutes with Aaron and Sam. We walk through the contract, answer your questions, and you decide on your timeline. We don't chase. We don't follow up.</p>
+      <a href="https://calendly.com/aron-ecomm/mca-deposit-program-call" class="btn btn-lg" style="background:white; color:var(--text);">Book Your Walkthrough</a>
+      <div class="final-cta-meta">FREE · 30 MIN · ZOOM · NO FOLLOW-UP CHASING</div>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="container">
+    <div class="footer-brand">&copy; 2026 Cashflow Acquisitions</div>
+    <div class="footer-disclaimer">
+      The Cashflow Acquisitions MCA Deposit Program is a private-lending arrangement structured as a purchase of future receivables. It is not a securities offering and is not subject to SEC registration. Returns are based on the cash-flow performance of vetted, brick-and-mortar borrower businesses and are not guaranteed. Past performance does not guarantee future results. All capital placement is subject to a fully executed lender-protective contract. Consult your own legal and tax advisors before participating.
+    </div>
+  </div>
+</footer>
+
+<script>
+(function() {
+  var slider = document.getElementById('calc-slider');
+  if (!slider) return;
+  var amountEl = document.getElementById('calc-amount');
+  var weekEl = document.getElementById('calc-week');
+  var monthEl = document.getElementById('calc-month');
+  var quarterEl = document.getElementById('calc-quarter');
+  var roiEl = document.getElementById('calc-roi');
+
+  function fmt(n) {
+    return '$' + Math.round(n).toLocaleString('en-US');
+  }
+  function update() {
+    var amt = parseInt(slider.value, 10);
+    // Tiered returns: 10% at $10K, scales to 20% at $20K+
+    var rate;
+    if (amt <= 10000) rate = 0.10;
+    else if (amt <= 15000) rate = 0.10 + ((amt - 10000) / 10000) * 0.10;
+    else if (amt <= 20000) rate = 0.15 + ((amt - 15000) / 5000) * 0.05;
+    else rate = 0.20;
+
+    var weekly = amt * rate;
+    var roiWeeks = Math.ceil(amt / weekly);
+
+    amountEl.textContent = fmt(amt);
+    weekEl.textContent = fmt(weekly);
+    monthEl.textContent = fmt(weekly * 4);
+    quarterEl.textContent = fmt(weekly * 13);
+    roiEl.textContent = roiWeeks + ' wks';
+  }
+  slider.addEventListener('input', update);
+  update();
+})();
+</script>
+
+</body></html>
